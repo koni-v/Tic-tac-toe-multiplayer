@@ -1,23 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+import { StreamChat } from "stream-chat";
+import Cookies from "universal-cookie";
 
 function App() {
+  const api_key = "yjg8j3w3mpag";
+  const cookies = new Cookies();
+  const token = cookies.get("token");
+  const client = StreamChat.getInstance(api_key); // For creating an account, connecting a user inside our stream dashboard
+  const [isAuth, setIsAuth] = useState(false);
+
+  if (token) {
+    // It connects the user to the StreamChat client which takes the user’s details (retrieved from the cookies) and the token for authentication.
+    client
+      .connectUser(
+        {
+          id: cookies.get("userId"),
+          name: cookies.get("username"),
+          firstName: cookies.get("firstName"),
+          lastName: cookies.get("lastName"),
+          hashedPassword: cookies.get("hashedPassword"),
+        },
+        token
+      )
+      .then((user) => {
+        setIsAuth(true);
+        console.log(user, isAuth);
+      });
+  }
+
+  const logOut = () => {
+    cookies.remove("token");
+    cookies.remove("userId");
+    cookies.remove("firstName");
+    cookies.remove("lastName");
+    cookies.remove("username");
+    cookies.remove("hashedPassword");
+    client.disconnectUser();
+    setIsAuth(false);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {isAuth ? (
+        <button onClick={logOut}>Log out</button>
+      ) : (
+        <>
+          <SignUp setIsAuth={setIsAuth} />
+          <Login setIsAuth={setIsAuth} />
+        </>
+      )}
     </div>
   );
 }
