@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useChatContext, Channel } from "stream-chat-react";
 import Game from "./Game";
+import CustomInput from "./CustomInput";
 
 const JoinGame = () => {
   const [rivalUsername, setRivalUsername] = useState("");
@@ -27,7 +28,7 @@ const JoinGame = () => {
   return (
     <>
       {channel ? (
-        <Channel channel={channel}>
+        <Channel channel={channel} Input={CustomInput}>
           <Game channel={channel} />
         </Channel>
       ) : (
