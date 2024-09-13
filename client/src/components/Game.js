@@ -3,7 +3,7 @@ import Board from "./Board";
 import { Window, MessageList, MessageInput } from "stream-chat-react";
 import "../Chat.css";
 
-const Game = ({ channel }) => {
+const Game = ({ channel, setChannel }) => {
   const [playersJoined, setPlayersJoined] = useState(
     channel.state.watcher_count === 2
   );
@@ -30,7 +30,14 @@ const Game = ({ channel }) => {
         />
         <MessageInput noFiles />
       </Window>
-      {/* LEAVE THE GAME BUTTON */}
+      <button
+        onClick={async () => {
+          await channel.stopWatching();
+          setChannel(null);
+        }}
+      >
+        Leave Game
+      </button>
     </div>
   );
 };
