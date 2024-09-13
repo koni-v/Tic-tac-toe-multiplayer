@@ -13,6 +13,7 @@ const Board = ({ result, setResult }) => {
 
   useEffect(() => {
     checkWin();
+    checkTie();
   }, [board]);
 
   const chooseSquare = async (square) => {
@@ -46,10 +47,24 @@ const Board = ({ result, setResult }) => {
       });
 
       if (foundWinningPattern) {
-        setResult({ winner: board[currentPattern[0]], state: "Won" });
+        setResult({ winner: board[currentPattern[0]], state: "won" });
         alert(`Winner: ${board[currentPattern[0]]}`);
       }
     });
+  };
+
+  const checkTie = () => {
+    let field = true;
+    board.forEach((square) => {
+      if (square == "") {
+        field = false;
+      }
+    });
+
+    if (field) {
+      setResult({ winner: "none", state: "tie" });
+      alert("Game ties");
+    }
   };
 
   channel.on("game-move", (event) => {
