@@ -5,6 +5,7 @@ const Game = ({ channel }) => {
   const [playersJoined, setPlayersJoined] = useState(
     channel.state.watcher_count === 2
   );
+  const [result, setResult] = useState({ winner: "none", state: "none" });
 
   channel.on("user.watching.start", (e) => {
     setPlayersJoined(e.watcher_count === 2);
@@ -17,7 +18,7 @@ const Game = ({ channel }) => {
   // If both of the players are joined
   return (
     <div className="gameContainer">
-      <Board />
+      <Board result={result} setResult={setResult} />
       {/* CHAT */}
       {/* LEAVE THE GAME BUTTON */}
     </div>
