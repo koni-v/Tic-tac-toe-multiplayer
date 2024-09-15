@@ -26,7 +26,7 @@ const Game = ({ channel, setChannel }) => {
           disableDateSeparator
           closeReactionSelectorOnClick
           hideDeletedMessages
-          messageActions={["react"]}
+          messageActions={["react", "delete"]}
         />
         <MessageInput noFiles />
       </Window>
@@ -35,6 +35,7 @@ const Game = ({ channel, setChannel }) => {
           await channel.stopWatching();
           setChannel(null);
         }}
+        className="game-buttons leave-btn"
       >
         Leave Game
       </button>
